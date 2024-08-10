@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  backend: # backend container
+    build: ./backend
+    volumes:
+      - backend-data:/app
+    ports:
+      - "3000:3000" # map port 3000 on the host (your machine) to port 3000 on the container (docker)
+    env_file:
+      - backend/.env
+    networks:
+      - bridge
+
+  frontend: # frontend container
+    build: ./frontend
+    volumes:
+      - frontend-data:/app
+    ports:
+      - "4000:4000" # map port 4000 on the host (your machine) to port 4000 on the container (docker)
+    env_file:
+      - frontend/.env
+    networks:
+      - bridge
+
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "posthog"
+    networks:
+      - bridge
+
+networks:
+  bridge:
+    driver: bridge
+
+volumes:
+  backend-data:
+  frontend-data:
+  postgres-data:
+
