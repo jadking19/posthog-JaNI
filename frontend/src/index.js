@@ -1,8 +1,11 @@
 const express = require('express');
 const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT;
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/hello', (req, res) => {
